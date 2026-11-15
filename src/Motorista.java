@@ -1,12 +1,14 @@
+
 public class Motorista {
     private String nome;
     private String cpf;
     private String cnh;
     private String categoriaCNH;
     private String telefone;
-    private boolean permissaoDescarga;
+    private boolean temCaminhao;
 
-    public Motorista(String nome, String cpf, String cnh, String categoriaCNH, String telefone) {
+    public Motorista(String nome, String cpf, String cnh,
+                     String categoriaCNH, String telefone) {
         this.nome = nome;
         this.cpf = cpf;
         this.cnh = cnh;
@@ -54,46 +56,22 @@ public class Motorista {
         this.telefone = telefone;
     }
 
-    public boolean getPermissaoDescarga() {
-        return permissaoDescarga;
+    public boolean getTemCaminhao() {
+        return temCaminhao;
     }
 
-    public void setPermissaoDescarga(boolean permissaoDescarga) {
-        this.permissaoDescarga = permissaoDescarga;
+    public void setTemCaminhao(boolean temCaminhao) {
+        this.temCaminhao = temCaminhao;
     }
 
-    public boolean realizarDescarga(Caminhao caminhao){
-        if(verificarPermissaoDescarga()){
-            System.out.println("---------------------------------------------------------");
-            System.out.println("Realizando descarga......");
-            caminhao.setCargaKG(0);
-            caminhao.setCargaTipo("vazio");
-            System.out.println("Carga descarregada com sucesso!");
-            return true;
-        } else{
-            System.out.println("---------------------------------------------------------");
-            System.out.println("Não é possível realizar a descarga: não foi recebida autorização");
-            return false;
-        }
-    }
-
-    public boolean verificarPermissaoDescarga(){
-        if(permissaoDescarga){
-            System.out.println("---------------------------------------------------------");
-            System.out.println("O motorista está autorizado a descarregar a carga");
-            return true;
-        } else{
-            System.out.println("---------------------------------------------------------");
-            System.out.println("O motorista ainda não foi autorizado a realizar a descarga, favor aguarde na fila");
-            //chamar função para exibir o tempo de espera aproximado
-            return false;
-        }
-    }
-
-    public void solicitarRedirecionamento(){
+    public void exibirInfos() {
         System.out.println("---------------------------------------------------------");
-        System.out.println("Solicitando redirecionamento a Transportadora...........");
-        //Adicionar comunicação com a Transportadora aqui depois
+        System.out.println("Relatório de dados do motorista");
+        System.out.println("Nome: " + getNome());
+        System.out.println("CPF: " + getCpf());
+        System.out.println("CNH: " + getCnh());
+        System.out.println("Categoria da CNH: " + getCategoriaCNH());
+        System.out.println("Telefone: " + getTelefone());
+        System.out.println("Tem caminhão associado? " + getTemCaminhao());
     }
-
 }

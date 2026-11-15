@@ -1,19 +1,20 @@
+
 public class Caminhao {
     private String modelo;
     private String placa;
     private String marca;
     private int anoFabricacao;
-    private String cpfMotorista;
+    private Motorista motorista;
     private String cargaTipo;
     private double cargaKG;
     private double capacidadeCarga;
 
-    public Caminhao(String modelo, String placa, String marca, int anoFabricacao, String cpfMotorista, double capacidadeCarga) {
+    public Caminhao(String modelo, String placa, String marca,
+                    int anoFabricacao, double capacidadeCarga) {
         this.modelo = modelo;
         this.placa = placa;
         this.marca = marca;
         this.anoFabricacao = anoFabricacao;
-        this.cpfMotorista = cpfMotorista;
         this.capacidadeCarga = capacidadeCarga;
     }
 
@@ -49,12 +50,12 @@ public class Caminhao {
         this.anoFabricacao = anoFabricacao;
     }
 
-    public String getCpfMotorista() {
-        return cpfMotorista;
+    public Motorista getMotorista() {
+        return motorista;
     }
 
-    public void setCpfMotorista(String cpfMotorista) {
-        this.cpfMotorista = cpfMotorista;
+    public void setMotorista(Motorista motorista) {
+        this.motorista = motorista;
     }
 
     public String getCargaTipo() {
@@ -62,7 +63,7 @@ public class Caminhao {
     }
 
     public void setCargaTipo(String cargaTipo) {
-        System.out.println("Tipo de carga classificado como "+ cargaTipo);
+        System.out.println("Tipo de carga classificado como " + cargaTipo);
         this.cargaTipo = cargaTipo;
     }
 
@@ -71,17 +72,17 @@ public class Caminhao {
     }
 
     public boolean setCargaKG(double cargaKG) {
-        if(cargaKG < 0 ) {
-            System.out.println("O valor de carga não pode ser menor que zero");
+        if (cargaKG < 0) {
+            System.out.println("O valor de carga não pode ser menor que zero.");
             return false;
-        }else if(getCapacidadeCarga() < cargaKG){
+        } else if (cargaKG > getCapacidadeCarga()) {
             System.out.println("---------------------------------------------------------");
-            System.out.println("O valor informado atinge ou ultrapassa a capacidade máxima do caminhão");
+            System.out.println("O valor informado ultrapassa a capacidade máxima do caminhão.");
             return false;
         } else {
             this.cargaKG = cargaKG;
             System.out.println("---------------------------------------------------------");
-            System.out.println("Carga atual ajustada para "+cargaKG);
+            System.out.println("Carga atual ajustada para " + cargaKG);
             return true;
         }
     }
@@ -94,49 +95,60 @@ public class Caminhao {
         this.capacidadeCarga = capacidadeCarga;
     }
 
-    public void calcularFaixaCarga(double cargaKG){
-        if (cargaKG > 0 && cargaKG <= 3000){
-            if(setCargaKG(cargaKG)){
+    public void calcularFaixaCarga(double cargaKG) {
+        if (cargaKG > 0 && cargaKG <= 3000) {
+            if (setCargaKG(cargaKG)) {
                 setCargaTipo("Leve");
             }
-        } else if(cargaKG > 3000 && cargaKG <= 14000){
-            if(setCargaKG(cargaKG)){
+        } else if (cargaKG > 3000 && cargaKG <= 14000) {
+            if (setCargaKG(cargaKG)) {
                 setCargaTipo("Média");
             }
-        } else if(cargaKG > 14000){
-            if(setCargaKG(cargaKG)){
-            setCargaTipo("Pesada");
+        } else if (cargaKG > 14000) {
+            if (setCargaKG(cargaKG)) {
+                setCargaTipo("Pesada");
             }
-        } else{
+        } else {
             System.out.println("---------------------------------------------------------");
-            System.out.println("O valor de carga precisa ser maior que zero");
+            System.out.println("O valor de carga precisa ser maior que zero.");
         }
     }
 
-    public double calcularTempoDescarga(){//Chamar Doca aqui dentro quando ela estiver pronta, para armazenar o tempo
+    public double calcularTempoDescarga() {
         System.out.println("---------------------------------------------------------");
         System.out.println("Calculando tempo de descarga.....");
         double tempo = 0;
-        switch(getCargaTipo()){
-            case ("Leve"):
-                tempo = 2 * (getCargaKG() / 1000);
-                System.out.printf("O tempo de descarga do caminhão de placa %s é de %.2f minutos.%n", getPlaca(), tempo);
+        if (getCargaTipo() == null) {
+            System.out.println("O tipo de carga ainda não foi definido, favor calcular primeiro.");
+            return 0;
+        }
+        switch (getCargaTipo()) {
+            case "Leve":
+                tempo = 2 * (getCargaKG() / 1000.0);
                 break;
-            case ("Média"):
-                tempo = 4 * (getCargaKG() / 1000);
-                System.out.printf("O tempo de descarga do caminhão de placa %s é de %.2f minutos.%n", getPlaca(), tempo);
+            case "Média":
+                tempo = 4 * (getCargaKG() / 1000.0);
                 break;
-            case ("Pesada"):
-                tempo = 6 * (getCargaKG() / 1000);
-                System.out.printf("O tempo de descarga do caminhão de placa %s é de %.2f minutos.%n", getPlaca(), tempo);
+            case "Pesada":
+                tempo = 6 * (getCargaKG() / 1000.0);
+                break;
+            case "Vazio":
+                System.out.println("O caminhão está vazio. Não há tempo de descarga.");
                 break;
             default:
-                System.out.println("O tipo de carga ainda não foi definido, favor calcular primeiro");
+                System.out.println("O tipo de carga não foi reconhecido.");
                 break;
+        }
+        if (tempo > 0) {
+            System.out.printf("O tempo de descarga do caminhão de placa %s é de %.2f minutos.%n",getPlaca(), tempo);
         }
         return tempo;
     }
 
-
-
+    public void esvaziarCarga() {
+        System.out.println("---------------------------------------------------------");
+        setCargaKG(0);
+        setCargaTipo("Vazio");
+        System.out.println("Carga do caminhão esvaziada!");
+    }
 }
