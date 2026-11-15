@@ -7,7 +7,6 @@ public class Doca {
     private int tamanhoFila;
     private double tempoRestanteDescargaMin;
     private double tempoEsperaEstimadoMin;
-    private Caminhao[] fila;
 
     public Doca(int numeracao, double capacidadeKG, String categoriaMaximaCarga) {
         this.numeracao = numeracao;
@@ -18,7 +17,6 @@ public class Doca {
         this.tamanhoFila = 0;
         this.tempoRestanteDescargaMin = 0.0;
         this.tempoEsperaEstimadoMin = 0.0;
-        this.fila = new Caminhao[10];
     }
 
     public int getNumeracao() {
@@ -35,14 +33,6 @@ public class Doca {
 
     public void setCapacidadeKG(double capacidadeKG) {
         this.capacidadeKG = capacidadeKG;
-    }
-
-    public String getTipoDoca() {
-        return categoriaMaximaCarga;
-    }
-
-    public void setTipoDoca(String tipoDoca) {
-        this.categoriaMaximaCarga = tipoDoca;
     }
 
     public String getStatusDoca() {
@@ -81,16 +71,28 @@ public class Doca {
         this.tempoEsperaEstimadoMin = tempoEsperaEstimadoMin;
     }
 
-    public Caminhao[] getFila() {
-        return fila;
+    public String getCategoriaMaximaCarga() {
+        return categoriaMaximaCarga;
     }
 
+    public void setCategoriaMaximaCarga(String categoriaMaximaCarga) {
+        this.categoriaMaximaCarga = categoriaMaximaCarga;
+    }
+
+    public void setTamanhoFila(int tamanhoFila) {
+        this.tamanhoFila = tamanhoFila;
+    }
 
     public boolean verificarCompatibilidade(Caminhao caminhao) {
         if (caminhao == null) {
             return false;
         }
         if (categoriaMaximaCarga == null || caminhao.getCargaTipo() == null) {
+            return false;
+        }
+        if (!caminhao.getCargaTipo().equalsIgnoreCase("Leve") &&
+                !caminhao.getCargaTipo().equalsIgnoreCase("Média") &&
+                !caminhao.getCargaTipo().equalsIgnoreCase("Pesada")) {
             return false;
         }
         if (caminhao.getCargaKG() <= 0) {

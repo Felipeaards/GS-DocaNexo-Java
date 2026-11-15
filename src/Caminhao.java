@@ -73,6 +73,7 @@ public class Caminhao {
 
     public boolean setCargaKG(double cargaKG) {
         if (cargaKG < 0) {
+            System.out.println("---------------------------------------------------------");
             System.out.println("O valor de carga não pode ser menor que zero.");
             return false;
         } else if (cargaKG > getCapacidadeCarga()) {
@@ -91,8 +92,13 @@ public class Caminhao {
         return capacidadeCarga;
     }
 
-    public void setCapacidadeCarga(double capacidadeCarga) {
+    public boolean setCapacidadeCarga(double capacidadeCarga) {
+        if (capacidadeCarga < getCargaKG()){
+            System.out.println("A capacidade informada não pode ser alterada, pois a carga atual excederia a nova");
+            return false;
+        }
         this.capacidadeCarga = capacidadeCarga;
+        return true;
     }
 
     public void calcularFaixaCarga(double cargaKG) {
