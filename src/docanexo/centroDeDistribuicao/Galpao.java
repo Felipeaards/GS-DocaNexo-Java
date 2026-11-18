@@ -1,18 +1,20 @@
+package docanexo.centroDeDistribuicao;
+
+import docanexo.transportadora.Caminhao;
+
 public class Galpao {
     private int numero;
     private String identificacao;
     private String localizacao;
     private String statusFuncionamento;
-    private int capacidadeTotal;
     private Doca[] docas;
     private int quantidadeDocas;
 
-    public Galpao(int numero, String identificacao, String localizacao, String statusFuncionamento, int capacidadeTotal) {
+    public Galpao(int numero, String identificacao, String localizacao, String statusFuncionamento) {
         this.numero = numero;
         this.identificacao = identificacao;
         this.localizacao = localizacao;
         this.statusFuncionamento = statusFuncionamento;
-        this.capacidadeTotal = capacidadeTotal;
         this.docas = new Doca[10];
         this.quantidadeDocas = 0;
     }
@@ -49,20 +51,20 @@ public class Galpao {
         this.statusFuncionamento = statusFuncionamento;
     }
 
-    public int getCapacidadeTotal() {
-        return capacidadeTotal;
-    }
-
-    public void setCapacidadeTotal(int capacidadeTotal) {
-        this.capacidadeTotal = capacidadeTotal;
-    }
-
     public Doca[] getDocas() {
         return docas;
     }
 
+    public void setDocas(Doca[] docas) {
+        this.docas = docas;
+    }
+
     public int getQuantidadeDocas() {
         return quantidadeDocas;
+    }
+
+    public void setQuantidadeDocas(int quantidadeDocas) {
+        this.quantidadeDocas = quantidadeDocas;
     }
 
     public boolean adicionarDoca(Doca doca) {
@@ -86,12 +88,10 @@ public class Galpao {
 
     public Doca recomendarDoca(Caminhao caminhao) {
         if (caminhao == null) {
-            System.out.println("---------------------------------------------------------");
-            System.out.println("Um caminhão válido deve ser informado.");
             return null;
         }
         Doca melhorDoca = null;
-        // Avalia as docas registradas no galpão
+
         if (quantidadeDocas >= 1) {
             melhorDoca = avaliarDoca(docas[0], caminhao, melhorDoca);
         }
@@ -122,21 +122,14 @@ public class Galpao {
         if (quantidadeDocas >= 10) {
             melhorDoca = avaliarDoca(docas[9], caminhao, melhorDoca);
         }
-        // Verifica se alguma doca foi recomendada
+
         if (melhorDoca == null) {
-            System.out.println("---------------------------------------------------------");
-            System.out.println("Nenhuma doca compatível e disponível foi encontrada.");
             return null;
         }
-        System.out.println("---------------------------------------------------------");
-        System.out.println("Doca recomendada: " + melhorDoca.getNumeracao());
-        System.out.println("Tempo estimado de espera: "+melhorDoca.calcularTempoEsperaTotal() + " minutos");
         return melhorDoca;
     }
 
-
-
-    private Doca avaliarDoca(Doca docaAvaliada, Caminhao caminhao, Doca melhorDoca) {
+    public Doca avaliarDoca(Doca docaAvaliada, Caminhao caminhao, Doca melhorDoca) {
         if (docaAvaliada == null) {
             return melhorDoca;
         }
@@ -145,13 +138,13 @@ public class Galpao {
         }
         if (!docaAvaliada.getStatusDoca().equalsIgnoreCase("Disponível") && !docaAvaliada.getStatusDoca().equalsIgnoreCase("Ocupada")) {
             return melhorDoca;
-        }// Verifica se o status é diferente de Disponível e de Ocupada. Se for, devolve a doca anterior
+        }
         if (!docaAvaliada.verificarCompatibilidade(caminhao)) {
             return melhorDoca;
-        }// Verifica se o caminhão pode descarregar naquela doca
+        }
         if (melhorDoca == null) {
             return docaAvaliada;
-        }// Se ainda não existe uma doca recomendada (No caso de ser a primeira doca válida analisáda)
+        }
         double tempoAtual = docaAvaliada.calcularTempoEsperaTotal();
         double tempoMelhor = melhorDoca.calcularTempoEsperaTotal();
         if (tempoAtual < tempoMelhor) {
@@ -159,6 +152,5 @@ public class Galpao {
         }
         return melhorDoca;
     }
-
 
 }

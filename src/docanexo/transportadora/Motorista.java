@@ -1,3 +1,4 @@
+package docanexo.transportadora;
 
 public class Motorista {
     private String nome;

@@ -1,5 +1,0 @@
-Referências
-
-drawn.io = Usado para a criação do diagrama UML
-
-ChatGPT = Utilizado para revisão de lógica em códigos

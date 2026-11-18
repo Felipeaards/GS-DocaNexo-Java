@@ -1,3 +1,4 @@
+package docanexo.transportadora;
 
 public class Caminhao {
     private String modelo;
@@ -9,8 +10,7 @@ public class Caminhao {
     private double cargaKG;
     private double capacidadeCarga;
 
-    public Caminhao(String modelo, String placa, String marca,
-                    int anoFabricacao, double capacidadeCarga) {
+    public Caminhao(String modelo, String placa, String marca, int anoFabricacao, double capacidadeCarga) {
         this.modelo = modelo;
         this.placa = placa;
         this.marca = marca;

@@ -1,3 +1,7 @@
+package docanexo.centroDeDistribuicao;
+
+import docanexo.transportadora.Caminhao;
+
 public class Doca {
     private int numeracao;
     private double capacidadeKG;

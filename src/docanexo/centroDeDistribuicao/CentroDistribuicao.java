@@ -1,3 +1,7 @@
+package docanexo.centroDeDistribuicao;
+
+import docanexo.transportadora.Caminhao;
+
 public class CentroDistribuicao {
     private int id;
     private String nome;
@@ -98,7 +102,6 @@ public class CentroDistribuicao {
             return null;
         }
         Galpao melhorGalpao = null;
-        // Avalia as docas registradas no galpão
         if (quantidadeGalpoes >= 1) {
             melhorGalpao = avaliarGalpao(galpoes[0], caminhao, melhorGalpao);
         }
@@ -129,44 +132,24 @@ public class CentroDistribuicao {
         if (quantidadeGalpoes >= 10) {
             melhorGalpao = avaliarGalpao(galpoes[9], caminhao, melhorGalpao);
         }
-        // Verifica se alguma doca foi recomendada
         if (melhorGalpao == null) {
             System.out.println("---------------------------------------------------------");
-            System.out.println("Nenhum galpão compatível e disponível foi encontrada.");
+            System.out.println("Nenhum galpão compatível e disponível foi encontrado.");
+            return null;
+        }
+        Doca docaRecomendada = melhorGalpao.recomendarDoca(caminhao);
+        if (docaRecomendada == null) {
+            System.out.println("Nenhuma doca adequada foi encontrada.");
             return null;
         }
         System.out.println("---------------------------------------------------------");
         System.out.println("Galpão recomendado: " + melhorGalpao.getIdentificacao());
-        System.out.println("Tempo estimado de espera: "+melhorGalpao.calcularTempoEsperaTotal() + " minutos");
+        System.out.println("Doca recomendada: " + docaRecomendada.getNumeracao());
+        System.out.println("Tempo estimado de espera: "+docaRecomendada.calcularTempoEsperaTotal() + " minutos");
         return melhorGalpao;
     }
 
-
-
-    private Galpao avaliarGalpao(Galpao galpaoAvaliado, Caminhao caminhao, Galpao melhorGalpao) {
-        if (galpaoAvaliado == null) {
-            return melhorGalpao;
-        }
-        if (galpaoAvaliado.getStatusFuncionamento() == null) {
-            return melhorGalpao;
-        }
-        if (!galpaoAvaliado.getStatusFuncionamento().equalsIgnoreCase("Disponível") && !galpaoAvaliado.getStatusFuncionamento().equalsIgnoreCase("Ocupada")) {
-            return melhorGalpao;
-        }// Verifica se o status é diferente de Disponível e de Ocupada. Se for, devolve a doca anterior
-        Doca docaAtual = galpaoAvaliado.recomendarDoca(caminhao);
-        if (melhorGalpao == null) {
-            return galpaoAvaliado;
-        }// Se ainda não existe uma doca recomendada (No caso de ser a primeira doca válida analisáda)
-        double tempoAtual = galpaoAvaliado.calcularTempoEsperaTotal();
-        double tempoMelhor = melhorGalpao.calcularTempoEsperaTotal();
-        if (tempoAtual < tempoMelhor) {
-            return galpaoAvaliado;
-        }
-        return melhorGalpao;
-    }
-
-
-    private Galpao avaliarGalpao(Galpao galpaoAvaliado, Caminhao caminhao, Galpao melhorGalpao) {
+    public Galpao avaliarGalpao(Galpao galpaoAvaliado, Caminhao caminhao, Galpao melhorGalpao) {
         if (galpaoAvaliado == null) {
             return melhorGalpao;
         }
@@ -177,22 +160,17 @@ public class CentroDistribuicao {
                 !galpaoAvaliado.getStatusFuncionamento().equalsIgnoreCase("Ocupada")) {
             return melhorGalpao;
         }
-        // Solicita ao galpão a melhor doca para o caminhão
         Doca docaAtual = galpaoAvaliado.recomendarDoca(caminhao);
-        // Se o galpão não encontrou uma doca adequada, ele é descartado
         if (docaAtual == null) {
             return melhorGalpao;
         }
-        // Se ainda não existe um galpão recomendado
         if (melhorGalpao == null) {
             return galpaoAvaliado;
         }
-        // Consulta a doca recomendada pelo melhor galpão anterior
         Doca docaMelhor = melhorGalpao.recomendarDoca(caminhao);
         if (docaMelhor == null) {
             return galpaoAvaliado;
         }
-        // Compara os tempos de espera das duas docas
         double tempoAtual = docaAtual.calcularTempoEsperaTotal();
         double tempoMelhor = docaMelhor.calcularTempoEsperaTotal();
         if (tempoAtual < tempoMelhor) {
